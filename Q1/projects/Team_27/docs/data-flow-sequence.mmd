@@ -1,0 +1,72 @@
+sequenceDiagram
+    participant S as Student
+    participant F as Frontend
+    participant B as Backend  
+    participant D as Database
+    participant I as Instructor
+    
+    Note over S,I: Authentication Flow
+    S->>F: Enter credentials in Login.jsx
+    F->>B: POST /api/auth/login
+    B->>D: Validate against participants collection
+    D-->>B: User data with courses
+    B-->>F: JWT Token + User profile
+    F-->>S: Redirect to Dashboard based on role
+    
+    Note over S,I: Session Creation Flow
+    I->>F: Create session in DashboardInstructor.jsx
+    F->>B: POST /api/sessions
+    B->>D: Store in sessions collection
+    D-->>B: Session created with sessionId
+    B->>F: Socket broadcast session:created
+    F-->>I: Session started confirmation
+    F-->>S: Session available in dashboard
+    
+    Note over S,I: Sticky Note Question Posting
+    S->>F: Post question in SessionView.jsx
+    F->>F: Generate random color & rotation for sticky note
+    F->>B: POST /api/questions/:sessionId
+    B->>D: Embed question in session document
+    D-->>B: Question saved with ObjectId
+    B->>F: Socket broadcast question:created
+    F->>F: Animate new sticky note appearance
+    F-->>I: Real-time sticky note appears
+    F-->>S: Question posted with wobble animation
+    
+    Note over S,I: Instructor Reply Flow
+    I->>F: Reply to question in SessionView.jsx
+    F->>B: POST /api/replies/:sessionId/:questionId
+    B->>D: Add reply to question.replies array
+    D-->>B: Reply embedded successfully
+    B->>D: Track update in sessionupdates
+    B->>F: Socket broadcast reply:created
+    F-->>S: Reply appears under sticky note
+    F-->>I: Reply confirmation
+    
+    Note over S,I: Mark Question Answered
+    I->>F: Mark answered in SessionView.jsx
+    F->>B: PATCH /api/questions/:sessionId/:questionId/answered
+    B->>D: Update question status in embedded document
+    D-->>B: Status updated to "answered"
+    B->>D: Track statusChange in sessionupdates
+    B->>F: Socket broadcast question:answered
+    F->>F: Apply answered styling to sticky note
+    F-->>S: Sticky note visual status change
+    F-->>I: Status update confirmed
+    
+    Note over S,I: Session End Flow
+    I->>F: End session in DashboardInstructor.jsx
+    F->>B: PATCH /api/sessions/:sessionId/end
+    B->>D: Set endAt timestamp and status completed
+    D-->>B: Session status updated
+    B->>F: Socket broadcast session:ended
+    F-->>S: Session ended notification
+    F-->>I: Return to dashboard
+    
+    Note over S,I: Update Tracking for Participants
+    S->>F: View completed session in DashboardParticipant.jsx
+    F->>B: GET /api/updates/:sessionId
+    B->>D: Query sessionupdates for unseen changes
+    D-->>B: Array of updates since lastSeenAt
+    B-->>F: Update indicators data
+    F-->>S: Show "NEW" badges on updated sessions

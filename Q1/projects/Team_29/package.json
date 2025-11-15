@@ -1,0 +1,20 @@
+{
+  "name": "vidyavichar-classroom-q-a-sticky-board",
+  "version": "1.0.0",
+  "description": "Initialization: npm init -y\r     Packages: npm install express mongoose cors dotenv",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Rajkjain03/VidyaVichar-Classroom-Q-A-sticky-board.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Rajkjain03/VidyaVichar-Classroom-Q-A-sticky-board/issues"
+  },
+  "homepage": "https://github.com/Rajkjain03/VidyaVichar-Classroom-Q-A-sticky-board#readme"
+}

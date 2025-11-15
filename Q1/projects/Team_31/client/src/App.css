@@ -1,0 +1,12 @@
+.app-container {
+  text-align: center;
+  padding: 1rem;
+}
+
+.app-container h1 {
+  font-family: 'Gochi Hand',
+    cursive;
+  font-size: 3.5rem;
+  color: #f0f0f0;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}

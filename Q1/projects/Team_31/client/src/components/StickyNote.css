@@ -1,0 +1,100 @@
+.sticky-note {
+    background-color: #fefabc;
+    padding: 1.5rem;
+    font-family: sans-serif;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
+    width: 250px;
+    height: 250px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: all 0.2s ease-in-out;
+    transform: rotate(-2deg);
+    position: relative;
+    border: 2px solid transparent;
+}
+
+
+.sticky-note.answered {
+    background-color: #d4edda;
+    transform: rotate(0deg);
+}
+
+.sticky-note.important {
+    border-color: #ffc107;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
+    transform: scale(1.05) rotate(-1deg);
+    z-index: 5;
+}
+
+.sticky-note:hover {
+    transform: rotate(0deg) scale(1.08);
+    box-shadow: 0 15px 20px -5px rgba(0, 0, 0, 0.2);
+    z-index: 10;
+}
+
+
+.sticky-note-text {
+    font-size: 1.2rem;
+    line-height: 1.4;
+    word-wrap: break-word;
+    overflow-y: auto;
+    flex-grow: 1;
+}
+
+.sticky-note-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid #eadd8a;
+    padding-top: 0.5rem;
+    margin-top: 1rem;
+}
+
+.sticky-note.answered .sticky-note-footer {
+    border-top-color: #c3e6cb;
+}
+
+.author-name {
+    font-style: italic;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.note-actions button {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    margin-left: 0.5rem;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+}
+
+.note-actions button:hover {
+    opacity: 1;
+}
+
+.note-actions button:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.important-badge {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    font-size: 1.5rem;
+    background-color: #ffc107;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.sticky-note.important .note-actions button[title*="Important"] {
+    display: none;
+}

@@ -1,0 +1,85 @@
+.question-list {
+  background: white;
+  border: 1px solid #ddd;
+  padding: 20px;
+  margin: 10px;
+  border-radius: 3px;
+}
+
+.question-list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.question-list-header h2 {
+  margin: 0;
+  color: #333;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.filter-indicator {
+  font-size: 0.8rem;
+  font-weight: normal;
+  color: #666;
+  background: #f0f0f0;
+  padding: 0.25rem 0.5rem;
+  border-radius: 12px;
+}
+
+.sort-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.sort-controls label {
+  font-size: 0.9rem;
+  color: #666;
+  font-weight: 500;
+}
+
+.sort-controls select {
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background: white;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.sort-controls select:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+.questions-container {
+  position: relative;
+}
+
+.questions-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 10px;
+  background: #f9f9f9;
+  border: 1px solid #ddd;
+  min-height: 300px;
+  border-radius: 3px;
+}
+
+.no-questions {
+  text-align: center;
+  padding: 3rem;
+  color: #666;
+}
+
+.no-questions p {
+  margin: 0.5rem 0;
+}

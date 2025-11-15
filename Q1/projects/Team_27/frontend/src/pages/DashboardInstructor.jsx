@@ -1,0 +1,219 @@
+import React, { useEffect, useState } from "react";
+import { getMySessions, createSession, endSession } from "../api/sessionApi";
+import { getUpdates } from "../api/updateApi";
+import { useAuthContext } from "../context/AuthContext";
+import { Link } from "react-router-dom";
+import { getErrorMessage } from "../utils/sessionUtils";
+
+export default function DashboardInstructor() {
+  const { user, logout } = useAuthContext();
+  const [sessions, setSessions] = useState([]);
+  const [courseName, setCourseName] = useState(user?.courses?.[0]?.courseName || "");
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const data = await getMySessions();
+        
+        // For each completed session, check if there are unseen updates
+        const sessionsWithUpdates = await Promise.all(
+          data.map(async (session) => {
+            if (session.status === 'completed') {
+              try {
+                const updates = await getUpdates(session.sessionId);
+                return {
+                  ...session,
+                  hasUpdates: updates.updates && updates.updates.length > 0
+                };
+              } catch (err) {
+                console.warn("Could not fetch updates for session", session.sessionId, err);
+                return { ...session, hasUpdates: false };
+              }
+            }
+            return { ...session, hasUpdates: false };
+          })
+        );
+        
+        setSessions(sessionsWithUpdates);
+      } catch (e) {
+        console.error("Error loading sessions:", e);
+        alert("Failed to load sessions. Please refresh the page.");
+      }
+    })();
+  }, []);
+
+  const handleCreate = async () => {
+    if (!courseName) return alert("Course name required");
+    try {
+      const s = await createSession({ courseName });
+      setSessions(prev => [s, ...prev]);
+    } catch (err) {
+      alert(getErrorMessage(err));
+    }
+  };
+
+  const handleEnd = async (sessionId) => {
+    try {
+      await endSession(sessionId);
+      setSessions(prev => prev.map(s => s.sessionId === sessionId ? { ...s, status: "completed" } : s));
+    } catch (err) {
+      alert(getErrorMessage(err));
+    }
+  };
+
+  return (
+    <div className="container fade-in">
+      <div className="text-center mb-8">
+        <h1>Instructor Dashboard</h1>
+        <p style={{ color: "var(--text-secondary)", fontSize: "1.125rem" }}>
+          Manage your Q&A sessions and courses
+        </p>
+      </div>
+
+      <div className="card mb-6">
+        <div className="card-header">
+          <h2 className="card-title">Create New Session</h2>
+          <p className="card-subtitle">Start a live Q&A session for your course</p>
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr auto", gap: "var(--space-4)", alignItems: "end" }}>
+          <div className="form-group">
+            <label>Course Name</label>
+            <input 
+              value={courseName} 
+              onChange={e => setCourseName(e.target.value)}
+              placeholder="Enter course name..."
+            />
+          </div>
+          <button onClick={handleCreate} className="btn-success">
+            🚀 Create Session
+          </button>
+        </div>
+      </div>
+
+      <section>
+        <div className="card-header">
+          <h2 className="card-title">Session History</h2>
+          <p className="card-subtitle">All your created sessions</p>
+        </div>
+        
+        {sessions.length === 0 ? (
+          <div className="card text-center">
+            <div style={{ padding: "var(--space-8)" }}>
+              <div style={{ 
+                fontSize: "3rem", 
+                color: "var(--text-muted)", 
+                marginBottom: "var(--space-4)" 
+              }}>
+                🎓
+              </div>
+              <h3 style={{ color: "var(--text-muted)" }}>No Sessions Yet</h3>
+              <p style={{ color: "var(--text-secondary)" }}>
+                Create your first session to start engaging with students!
+              </p>
+            </div>
+          </div>
+        ) : (
+          <div style={{ display: "grid", gap: "var(--space-4)" }}>
+            {sessions.map(s => (
+              <div key={s.sessionId} className="card">
+                <div style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  flexWrap: "wrap",
+                  gap: "var(--space-4)"
+                }}>
+                  <div style={{ flex: 1, minWidth: "250px", position: "relative" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "var(--space-2)" }}>
+                      <h3 className="card-title" style={{ margin: 0, marginBottom: "var(--space-2)" }}>
+                        {s.courseName}
+                      </h3>
+                      {/* Update indicator for completed sessions with new content */}
+                      {s.status === 'completed' && s.hasUpdates && (
+                        <div style={{
+                          width: "8px",
+                          height: "8px",
+                          borderRadius: "50%",
+                          background: "var(--error-color)",
+                          animation: "pulse 2s infinite",
+                          marginLeft: "var(--space-1)"
+                        }} title="New updates since your last visit"></div>
+                      )}
+                    </div>
+                    <div style={{ display: "flex", alignItems: "center", gap: "var(--space-3)", flexWrap: "wrap" }}>
+                      <span style={{
+                        background: s.status === 'live' ? 'var(--success-color)' : 
+                                   s.status === 'active' ? 'var(--info-color)' : 'var(--text-muted)',
+                        color: 'white',
+                        padding: "var(--space-1) var(--space-3)",
+                        borderRadius: "var(--radius-md)",
+                        fontSize: "0.875rem",
+                        fontWeight: "500",
+                        textTransform: "capitalize"
+                      }}>
+                        {s.status === 'live' && '🔴 '}{s.status}
+                      </span>
+                      {/* Show update badge for sessions with new content */}
+                      {s.status === 'completed' && s.hasUpdates && (
+                        <span style={{
+                          background: "var(--error-color)",
+                          color: "white",
+                          padding: "var(--space-1) var(--space-2)",
+                          borderRadius: "var(--radius-sm)",
+                          fontSize: "0.75rem",
+                          fontWeight: "600",
+                          textTransform: "uppercase",
+                          letterSpacing: "0.5px"
+                        }}>
+                          🔔 NEW
+                        </span>
+                      )}
+                      <span style={{ color: "var(--text-secondary)", fontSize: "0.875rem" }}>
+                        📅 {new Date(s.startAt).toLocaleDateString()} at {new Date(s.startAt).toLocaleTimeString()}
+                      </span>
+                    </div>
+                  </div>
+                  <div style={{ display: "flex", gap: "var(--space-2)", alignItems: "center" }}>
+                    <Link 
+                      to={`/session/${s.sessionId}`}
+                      style={{
+                        textDecoration: "none",
+                        background: s.status === 'live' ? "var(--primary-gradient)" : 
+                                   s.status === 'active' ? "var(--info-color)" : 
+                                   "var(--text-secondary)",
+                        color: "white",
+                        padding: "var(--space-2) var(--space-4)",
+                        borderRadius: "var(--radius-md)",
+                        fontWeight: "500",
+                        transition: "var(--transition-normal)",
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: "var(--space-2)"
+                      }}
+                      onMouseEnter={(e) => e.target.style.transform = "translateY(-2px)"}
+                      onMouseLeave={(e) => e.target.style.transform = "translateY(0)"}
+                    >
+                      {s.status === 'live' ? '🔴 Manage Live Session' :
+                       s.status === 'active' ? '📅 Open Session' :
+                       s.status === 'completed' ? '📊 View Results' : 
+                       '👁️ View Session'}
+                    </Link>
+                    {s.status === "live" && (
+                      <button 
+                        onClick={() => handleEnd(s.sessionId)}
+                        className="btn-danger"
+                        style={{ fontSize: "0.875rem" }}
+                      >
+                        End Session
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </section>
+    </div>
+  );
+}

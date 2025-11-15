@@ -1,0 +1,72 @@
+erDiagram
+    PARTICIPANTS {
+        string id PK
+        string name
+        string email UK
+        string passwordHash
+        string role "instructor or student"
+        array courses "CourseSubSchema array"
+        date createdAt
+        date updatedAt
+    }
+    
+    COURSES_SUBSCHEMA {
+        string courseName
+        boolean enrolled
+        boolean isTA
+        boolean isInstructor
+    }
+    
+    SESSIONS {
+        string sessionId PK
+        string courseName
+        object createdBy "id and name"
+        date startAt
+        date endAt "null for active sessions"
+        string status "live or completed"
+        array questions "QuestionSchema embedded array"
+        date createdAt
+        date updatedAt
+    }
+    
+    QUESTIONS_EMBEDDED {
+        objectId _id "auto-generated"
+        string text
+        object author "id and name"
+        string status "unanswered or answered"
+        array replies "ReplySchema embedded array"
+        date createdAt
+        date updatedAt
+    }
+    
+    REPLIES_EMBEDDED {
+        objectId _id "auto-generated"
+        objectId parentReplyId "null for root replies"
+        object author "id and name"
+        string text
+        date createdAt
+    }
+    
+    SESSIONUPDATES {
+        objectId _id PK
+        string sessionId FK
+        string userId FK
+        date lastSeenAt
+        array updates "UpdateSchema array"
+        date createdAt
+        date updatedAt
+    }
+    
+    UPDATES_SUBSCHEMA {
+        objectId questionId
+        string updateType "newQuestion, statusChange, newReply"
+        date updatedAt
+    }
+    
+    PARTICIPANTS ||--o{ COURSES_SUBSCHEMA : contains
+    PARTICIPANTS ||--o{ SESSIONS : creates
+    PARTICIPANTS ||--o{ SESSIONUPDATES : tracks
+    SESSIONS ||--o{ QUESTIONS_EMBEDDED : embeds
+    QUESTIONS_EMBEDDED ||--o{ REPLIES_EMBEDDED : embeds
+    REPLIES_EMBEDDED }o--|| REPLIES_EMBEDDED : threads_via_parentReplyId
+    SESSIONUPDATES ||--o{ UPDATES_SUBSCHEMA : contains

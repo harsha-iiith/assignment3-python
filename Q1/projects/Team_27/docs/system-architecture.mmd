@@ -1,0 +1,95 @@
+graph TB
+    subgraph "Express App Layer"
+        APP[app.js - Express Setup]
+        SERVER[server.js - HTTP & Socket.IO Server]
+        CORS[CORS Configuration]
+        APP --> SERVER
+        APP --> CORS
+    end
+    
+    subgraph "Route Layer"
+        AR[authRoutes.js]
+        SR[sessionRoutes.js]
+        QR[questionRoutes.js]
+        RR[replyRoutes.js]
+        UR[updateRoutes.js]
+        URR[userRoutes.js]
+    end
+    
+    subgraph "Middleware Layer"
+        AUTH[auth.js - JWT Validation]
+        ERROR[Error Handling]
+    end
+    
+    subgraph "Controller Layer"
+        AC[authController.js]
+        SC[sessionController.js] 
+        QC[questionController.js]
+        RC[replyController.js]
+        UC[updateController.js]
+        URC[userController.js]
+    end
+    
+    subgraph "Socket Layer"
+        SIO[sockets/index.js]
+        ROOMS[Room Management]
+        EVENTS[Event Broadcasting]
+        SIO --> ROOMS
+        SIO --> EVENTS
+    end
+    
+    subgraph "Data Layer - Direct Access"
+        PM[models/Participant.js]
+        SM[models/Session.js] 
+        SUM[models/SessionUpdate.js]
+    end
+    
+    subgraph "Database Layer"
+        MONGODB[(MongoDB)]
+        PC[(participants)]
+        SC_DB[(sessions)]
+        SUC[(sessionupdates)]
+        MONGODB --> PC
+        MONGODB --> SC_DB
+        MONGODB --> SUC
+    end
+    
+    subgraph "Database Config"
+        DB_CONFIG[config/db.js]
+        DB_CONFIG --> MONGODB
+    end
+    
+    SERVER --> AUTH
+    AUTH --> AR
+    AUTH --> SR
+    AUTH --> QR
+    AUTH --> RR
+    AUTH --> UR
+    AUTH --> URR
+    
+    AR --> AC
+    SR --> SC
+    QR --> QC
+    RR --> RC
+    UR --> UC
+    URR --> URC
+    
+    AC --> PM
+    SC --> SM
+    QC --> SM
+    RC --> SM
+    UC --> SUM
+    URC --> PM
+    
+    PM --> PC
+    SM --> SC_DB
+    SUM --> SUC
+    
+    QC -.->|Emit Events| SIO
+    RC -.->|Emit Events| SIO
+    SC -.->|Emit Events| SIO
+    
+    style APP fill:#e3f2fd
+    style SIO fill:#fff3e0
+    style MONGODB fill:#e8f5e8
+    style AUTH fill:#fce4ec

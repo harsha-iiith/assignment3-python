@@ -1,0 +1,10 @@
+const express = require('express'); const router = express.Router();
+const questionController = require('../controllers/questionController');
+const { authenticate, authorizeRole } = require('../middleware/authMiddleware');
+router.get('/', authenticate, questionController.listQuestions);
+router.post('/', authenticate, authorizeRole('student'), questionController.createQuestion);
+router.patch('/:id', authenticate, authorizeRole('teacher'), questionController.updateQuestion);
+router.delete('/:id', authenticate, authorizeRole('teacher'), questionController.deleteQuestion);
+router.delete('/', authenticate, authorizeRole('teacher'), questionController.clearLecture);
+router.post('/:id/clarify', authenticate, authorizeRole('ta'), questionController.addClarification);
+module.exports = router;

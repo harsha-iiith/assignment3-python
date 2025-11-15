@@ -1,0 +1,65 @@
+.class-card {
+  background: white;
+  border: 1px solid #ddd;
+  padding: 15px;
+  cursor: pointer;
+  width: 250px;
+  font-family: Arial, sans-serif;
+  border-radius: 3px;
+}
+
+.class-card:hover {
+  background: #f9f9f9;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.class-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 10px;
+}
+
+.class-header h3 {
+  margin: 0;
+  color: #000;
+  font-size: 16px;
+  flex: 1;
+  font-weight: bold;
+}
+
+.class-code {
+  background: #ffc107;
+  color: #000;
+  padding: 3px 6px;
+  border: 1px solid #ccc;
+  font-size: 12px;
+  font-family: monospace;
+  font-weight: bold;
+  border-radius: 2px;
+}
+
+.class-info {
+  margin-bottom: 10px;
+}
+
+.class-description {
+  margin: 0;
+  color: #000;
+  font-size: 12px;
+}
+
+.class-status {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.status-badge {
+  background: #4caf50;
+  color: white;
+  padding: 3px 8px;
+  border: 1px solid #ccc;
+  font-size: 10px;
+  font-weight: bold;
+  border-radius: 2px;
+}

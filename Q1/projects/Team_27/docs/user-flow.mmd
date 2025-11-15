@@ -1,0 +1,63 @@
+flowchart TD
+    A[User Opens App] --> B{Authenticated?}
+    B -->|No| C[Login Page]
+    B -->|Yes| D{User Role?}
+    
+    C --> E[Enter Credentials]
+    E --> F[Validate Login]
+    F -->|Success| D
+    F -->|Failure| G[Show Error Message]
+    G --> C
+    
+    D -->|Student| H[DashboardParticipant.jsx]
+    D -->|Instructor| I[DashboardInstructor.jsx] 
+    D -->|TA| H
+    
+    H --> K[View My Sessions List]
+    H --> PP[ProfilePage.jsx]
+    I --> L[Session Management Panel]
+    I --> PP
+    
+    K --> N{Session Status?}
+    N -->|Active| O[Join Active Session]
+    N -->|Completed| P[View Completed Session]
+    
+    L --> Q[Create Session Form - Embedded]
+    L --> R[View Active Sessions]
+    L --> S[End Active Session]
+    
+    O --> T[SessionView.jsx - Student Mode]
+    P --> U[SessionView.jsx - Read-only]
+    Q --> V[New Session Created]
+    V --> R
+    
+    T --> X[Post Sticky Note Questions]
+    T --> Y[View Animated Sticky Notes]
+    
+    U --> Z[View Questions & Replies]
+    U --> AA[See Session History]
+    
+    R --> BB[SessionView.jsx - Instructor Mode]
+    BB --> CC[Monitor Incoming Questions]
+    BB --> DD[Reply to Questions]  
+    BB --> EE[Mark Questions Answered]
+    BB --> FF[End Session Button]
+    
+    X --> GG[Socket.IO Real-time Broadcast]
+    DD --> GG
+    EE --> GG  
+    FF --> HH[Session End Notification]
+    
+    GG --> II[Update All Connected Users]
+    HH --> JJ[Return to Dashboard]
+    
+    PP --> KK[View User Profile]
+    PP --> LL[Logout]
+    LL --> A
+    
+    style A fill:#e1f5fe
+    style T fill:#e8f5e8
+    style BB fill:#fff3e0
+    style GG fill:#fce4ec
+    style H fill:#f3e5f5
+    style I fill:#e3f2fd

@@ -1,0 +1,76 @@
+graph TB
+    subgraph "Client Tier - React Frontend"
+        A[React App - Vite Build]
+        A1[pages/Login.jsx]
+        A2[pages/DashboardParticipant.jsx]
+        A3[pages/DashboardInstructor.jsx]
+        A4[pages/SessionView.jsx - Sticky Notes UI]
+        A5[pages/ProfilePage.jsx]
+        A6[components/Header.jsx]
+        A7[context/AuthContext.jsx & SocketContext.jsx]
+        A --> A1
+        A --> A2
+        A --> A3
+        A --> A4
+        A --> A5
+        A --> A6
+        A --> A7
+    end
+    
+    subgraph "Application Tier - Express Backend"
+        B[Express.js Server]
+        B1[middleware/auth.js - JWT Validation]
+        B2[routes/ - 6 Route Files]
+        B3[controllers/ - 6 Controllers]
+        B4[sockets/index.js - Real-time Events]
+        B5[models/ - 3 Mongoose Models]
+        B --> B1
+        B --> B2
+        B --> B3
+        B --> B4
+        B --> B5
+    end
+    
+    subgraph "Data Tier - MongoDB"
+        C[MongoDB Database]
+        C1[(participants Collection)]
+        C2[(sessions Collection - Embedded Questions)]
+        C3[(sessionupdates Collection)]
+        C --> C1
+        C --> C2
+        C --> C3
+    end
+    
+    subgraph "Communication Layer"
+        D[HTTP/REST APIs - 11 Endpoints]
+        E[Socket.IO - Room-based Broadcasting]
+        F[Mongoose ODM - Direct Model Access]
+    end
+    
+    A1 -->|POST /auth/login| B1
+    A2 -->|GET /sessions, GET /updates| B2
+    A3 -->|POST /sessions, PATCH /sessions/:id/end| B2
+    A4 -->|POST /questions, POST /replies| B3
+    A4 -->|Socket Events| B4
+    A5 -->|GET /users/me| B3
+    
+    B1 --> B3
+    B2 --> B3
+    B3 --> B5
+    B4 -.->|Real-time Broadcasting| A4
+    
+    B5 --> F
+    F --> C1
+    F --> C2
+    F --> C3
+    
+    A -.->|axios HTTP Requests| D
+    A -.->|Socket.IO Events| E
+    B -.->|Mongoose Queries| F
+    
+    style A fill:#e1f5fe
+    style B fill:#f3e5f5
+    style C fill:#e8f5e8
+    style A4 fill:#bbdefb
+    style B4 fill:#ce93d8
+    style C2 fill:#c8e6c9

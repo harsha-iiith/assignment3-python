@@ -1,0 +1,126 @@
+.filter-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+
+  background: #a0522d;
+  border: 2px solid #5e2c04;
+  border-bottom: 8px solid #3d1c02;
+  border-radius: 8px;
+
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  margin-bottom: 2rem;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+
+}
+
+.filters .filter-button {
+  background-color: rgba(0, 0, 0, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.8);
+  font-family: 'Gochi Hand', cursive;
+  font-size: 1.1rem;
+
+  border-radius: 20px;
+  padding: 0.5rem 1rem;
+  margin-right: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.filters .filter-button:hover {
+  background-color: rgba(0, 0, 0, 0.3);
+  color: white;
+}
+
+.filters .filter-button.active {
+  background-color: #2F4F4F;
+  color: white;
+  border-color: rgba(255, 255, 255, 0.8);
+}
+
+.filters .filter-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.clear-board-button {
+  background-color: #a4133c;
+  color: white;
+  border: 2px solid #5d0b22;
+  border-radius: 8px;
+  padding: 0.6rem 1.2rem;
+  font-size: 0.9rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s;
+  margin-left: 0.5rem;
+}
+
+.clear-board-button:hover {
+  background-color: #c9184a;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+.clear-board-button:disabled {
+  background-color: #8b5d69;
+  cursor: not-allowed;
+  border-color: #5d0b22;
+}
+
+.archive-button {
+  background-color: #4A90E2;
+  color: white;
+  border: 2px solid #275a8e;
+  border-radius: 8px;
+  padding: 0.6rem 1.2rem;
+  font-size: 0.9rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.archive-button:hover {
+  background-color: #5aa1f2;
+  box-shadow: 0 0 10px rgba(74, 144, 226, 0.5);
+}
+
+@media (max-width: 600px) {
+  .filter-toolbar {
+    flex-direction: column; /* stack vertically */
+    align-items: stretch;   /* stretch full width */
+  }
+
+  .filters,
+  .actions {
+    justify-content: center;
+    width: 100%;
+  }
+
+  .filters .filter-button,
+  .archive-button,
+  .clear-board-button {
+    flex: 1;              /* stretch buttons evenly */
+    text-align: center;
+  }
+}

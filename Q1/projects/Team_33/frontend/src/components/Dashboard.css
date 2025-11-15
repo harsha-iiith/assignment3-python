@@ -1,0 +1,116 @@
+.dashboard {
+  min-height: 100vh;
+  background: #f0f0f0;
+  font-family: Arial, sans-serif;
+}
+
+.dashboard-main {
+  padding: 20px;
+}
+
+.dashboard-header {
+  background: white;
+  border: 1px solid #ddd;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 3px;
+}
+
+.dashboard-header h1 {
+  margin: 0 0 10px 0;
+  color: #000;
+  font-size: 24px;
+}
+
+.dashboard-header p {
+  margin: 0 0 15px 0;
+  color: #000;
+  font-size: 14px;
+}
+
+.dashboard-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.action-button {
+  padding: 10px 20px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  cursor: pointer;
+  font-weight: bold;
+  font-family: Arial, sans-serif;
+  border-radius: 3px;
+}
+
+.action-button.primary {
+  background: #2196F3;
+  color: white;
+}
+
+.action-button.primary:hover {
+  background: #1976D2;
+}
+
+.action-button.secondary {
+  background: #FF9800;
+  color: white;
+}
+
+.action-button.secondary:hover {
+  background: #F57C00;
+}
+
+.classes-section h2 {
+  margin-bottom: 15px;
+  color: #000;
+  font-size: 20px;
+}
+
+.classes-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.loading, .no-classes {
+  text-align: center;
+  padding: 40px;
+  color: #000;
+  font-size: 16px;
+}
+
+.no-classes {
+  background: white;
+  border: 1px dashed #ccc;
+  width: 100%;
+  border-radius: 3px;
+}
+
+.error-message {
+  background: #ffcccc;
+  color: #000;
+  padding: 15px;
+  margin-bottom: 15px;
+  border: 1px solid #ff9999;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: bold;
+  border-radius: 3px;
+}
+
+.close-error {
+  background: #f44336;
+  border: 1px solid #ccc;
+  font-size: 16px;
+  cursor: pointer;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 2px;
+}
+
+.close-error:hover {
+  background: #d32f2f;
+}

@@ -1,0 +1,95 @@
+graph LR
+    subgraph "Frontend Pages"
+        LOGIN[Login.jsx]
+        DASH_P[DashboardParticipant.jsx]
+        DASH_I[DashboardInstructor.jsx]
+        SESSION[SessionView.jsx]
+        PROFILE[ProfilePage.jsx]
+    end
+    
+    subgraph "Frontend Components"
+        HEADER[Header.jsx]
+        STICKY[Sticky Notes CSS Animation]
+    end
+    
+    subgraph "Context Management"
+        AUTH_CTX[AuthContext.jsx]
+        SOCKET_CTX[SocketContext.jsx]
+    end
+    
+    subgraph "API Layer"
+        AXIOS[axiosInstance.js]
+        AUTH_API[authApi.js]
+        SESSION_API[sessionApi.js]
+        QUESTION_API[questionApi.js]
+        REPLY_API[replyApi.js]
+        UPDATE_API[updateApi.js]
+        USER_API[userApi.js]
+    end
+    
+    subgraph "Backend Controllers - Direct Model Access"
+        AUTH_CTRL[authController.js]
+        SESSION_CTRL[sessionController.js]
+        QUESTION_CTRL[questionController.js]
+        REPLY_CTRL[replyController.js]
+        UPDATE_CTRL[updateController.js]
+        USER_CTRL[userController.js]
+    end
+    
+    subgraph "Database Models"
+        PART_MODEL[Participant.js]
+        SESS_MODEL[Session.js - Embedded Questions]
+        UPDATE_MODEL[SessionUpdate.js]
+    end
+    
+    subgraph "Real-time Socket"
+        SOCKET_SERVER[sockets/index.js]
+        ROOM_MGMT[Room Join/Leave Logic]
+        BROADCAST[Question/Reply Broadcasting]
+    end
+    
+    LOGIN --> AUTH_API
+    DASH_P --> SESSION_API
+    DASH_P --> UPDATE_API
+    DASH_I --> SESSION_API
+    SESSION --> QUESTION_API
+    SESSION --> REPLY_API
+    SESSION --> SOCKET_CTX
+    PROFILE --> USER_API
+    
+    AUTH_API --> AXIOS
+    SESSION_API --> AXIOS
+    QUESTION_API --> AXIOS
+    REPLY_API --> AXIOS
+    UPDATE_API --> AXIOS
+    USER_API --> AXIOS
+    
+    AXIOS --> AUTH_CTRL
+    AXIOS --> SESSION_CTRL
+    AXIOS --> QUESTION_CTRL
+    AXIOS --> REPLY_CTRL
+    AXIOS --> UPDATE_CTRL
+    AXIOS --> USER_CTRL
+    
+    AUTH_CTRL --> PART_MODEL
+    SESSION_CTRL --> SESS_MODEL
+    QUESTION_CTRL --> SESS_MODEL
+    REPLY_CTRL --> SESS_MODEL
+    UPDATE_CTRL --> UPDATE_MODEL
+    USER_CTRL --> PART_MODEL
+    
+    SOCKET_CTX --> SOCKET_SERVER
+    QUESTION_CTRL -.->|Emit Events| SOCKET_SERVER
+    REPLY_CTRL -.->|Emit Events| SOCKET_SERVER
+    SESSION_CTRL -.->|Emit Events| SOCKET_SERVER
+    
+    SOCKET_SERVER --> ROOM_MGMT
+    SOCKET_SERVER --> BROADCAST
+    
+    SESSION --> STICKY
+    
+    style LOGIN fill:#e3f2fd
+    style SESSION fill:#e8f5e8
+    style SOCKET_SERVER fill:#fff3e0
+    style SESS_MODEL fill:#f3e5f5
+    style STICKY fill:#fce4ec
